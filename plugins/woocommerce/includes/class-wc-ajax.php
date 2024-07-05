@@ -3431,31 +3431,43 @@ class WC_AJAX {
 	/**
 	 * Handle submissions from assets/js/wc-shipping-classes.js Backbone model.
 	 */
+
 	public static function shipping_classes_save_changes() {
+		error_log("entrando a la funcion de shipping_classes");
+		//1                                            //2
 		if ( ! isset( $_POST['wc_shipping_classes_nonce'], $_POST['changes'] ) ) {
+			//3
 			wp_send_json_error( 'missing_fields' );
 			wp_die();
 		}
-
+			
+		//4                                                                                //5
 		if ( ! wp_verify_nonce( wp_unslash( $_POST['wc_shipping_classes_nonce'] ), 'wc_shipping_classes_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			//6
 			wp_send_json_error( 'bad_nonce' );
 			wp_die();
 		}
 
+		//7
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			//8
 			wp_send_json_error( 'missing_capabilities' );
 			wp_die();
 		}
 
 		$changes = wp_unslash( $_POST['changes'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
+		//9
 		foreach ( $changes as $term_id => $data ) {
 			$term_id = absint( $term_id );
 
+			//10
 			if ( isset( $data['deleted'] ) ) {
+				//11
 				if ( isset( $data['newRow'] ) ) {
 					// So the user added and deleted a new row.
 					// That's fine, it's not in the database anyways. NEXT!
+					//12
 					continue;
 				}
 				/**
@@ -3463,6 +3475,8 @@ class WC_AJAX {
 				 *
 				 * @since 7.8.0
 				 */
+				
+				//13
 				do_action(
 					'woocommerce_update_non_option_setting',
 					array(
@@ -3473,8 +3487,8 @@ class WC_AJAX {
 				wp_delete_term( $term_id, 'product_shipping_class' );
 				continue;
 			}
-
 			$update_args = array();
+			//14
 
 			if ( isset( $data['name'] ) ) {
 				/**
@@ -3482,33 +3496,40 @@ class WC_AJAX {
 				 *
 				 * @since 7.8.0
 				 */
+				//15
 				do_action( 'woocommerce_update_non_option_setting', array( 'id' => 'shipping_class_name' ) );
 				$update_args['name'] = wc_clean( $data['name'] );
 			}
-
+			//16
 			if ( isset( $data['slug'] ) ) {
 				/**
 				 * Notify that a non-option setting has been updated.
 				 *
 				 * @since 7.8.0
 				 */
+				//17
 				do_action( 'woocommerce_update_non_option_setting', array( 'id' => 'shipping_class_slug' ) );
 				$update_args['slug'] = wc_clean( $data['slug'] );
 			}
 
+			//18
 			if ( isset( $data['description'] ) ) {
 				/**
 				 * Notify that a non-option setting has been updated.
 				 *
 				 * @since 7.8.0
 				 */
+				//19
 				do_action( 'woocommerce_update_non_option_setting', array( 'id' => 'shipping_class_description' ) );
 				$update_args['description'] = wc_clean( $data['description'] );
 			}
 
+			//20
 			if ( isset( $data['newRow'] ) ) {
 				$update_args = array_filter( $update_args );
+				//21
 				if ( empty( $update_args['name'] ) ) {
+					//22
 					continue;
 				}
 				/**
@@ -3516,6 +3537,7 @@ class WC_AJAX {
 				 *
 				 * @since 7.8.0
 				 */
+				//23
 				do_action(
 					'woocommerce_update_non_option_setting',
 					array(
@@ -3531,13 +3553,15 @@ class WC_AJAX {
 				 *
 				 * @since 7.8.0
 				 */
+				//24
 				do_action( 'woocommerce_update_non_option_setting', array( 'id' => 'shipping_class' ) );
 				wp_update_term( $term_id, 'product_shipping_class', $update_args );
 			}
-
+			//25
 			do_action( 'woocommerce_shipping_classes_save_class', $term_id, $data );
-		}
+		}//26
 
+		//27
 		global $current_tab, $current_section;
 		$current_tab     = 'shipping';
 		$current_section = 'classes';
@@ -3554,7 +3578,7 @@ class WC_AJAX {
 				'shipping_classes' => $wc_shipping->get_shipping_classes(),
 			)
 		);
-	}
+	}//28
 
 	/**
 	 * Toggle payment gateway on or off via AJAX.
