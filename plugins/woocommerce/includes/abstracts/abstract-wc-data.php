@@ -10,9 +10,9 @@
  * @package     WooCommerce\Classes
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+/*if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-}
+}*/
 
 /**
  * Abstract WC Data Class
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @version  2.6.0
  * @package  WooCommerce\Abstracts
  */
-abstract class WC_Data {
+class WC_Data {
 
 	/**
 	 * ID for this object.
@@ -38,7 +38,7 @@ abstract class WC_Data {
 	 * @since 3.0.0
 	 * @var array
 	 */
-	protected $data = array();
+	public $data = array();
 
 	/**
 	 * Core data changes for this object.
@@ -46,7 +46,7 @@ abstract class WC_Data {
 	 * @since 3.0.0
 	 * @var array
 	 */
-	protected $changes = array();
+	public $changes = array();
 
 	/**
 	 * This is false until the object is read from the DB.
@@ -821,17 +821,27 @@ abstract class WC_Data {
 	 * @param string $prop Name of prop to set.
 	 * @param mixed  $value Value of the prop.
 	 */
-	protected function set_prop( $prop, $value ) {
+	public function set_prop( $prop, $value ) {
+		echo "entro set_prop";
+		//1
 		if ( array_key_exists( $prop, $this->data ) ) {
+			echo "primer if";
+			//2
 			if ( true === $this->object_read ) {
+				echo "segundo if";
+				//3                                              //4
 				if ( $value !== $this->data[ $prop ] || array_key_exists( $prop, $this->changes ) ) {
+					echo "tercer if";
+					//5
 					$this->changes[ $prop ] = $value;
 				}
 			} else {
+				echo "tercer if";
+				//6
 				$this->data[ $prop ] = $value;
-			}
-		}
-	}
+			}//7
+		}//8
+	}//9
 
 	/**
 	 * Return data changes only.
@@ -874,7 +884,7 @@ abstract class WC_Data {
 	 * @param  string $context What the value is for. Valid values are view and edit.
 	 * @return mixed
 	 */
-	protected function get_prop( $prop, $context = 'view' ) {
+	public function get_prop( $prop, $context = 'view' ) {
 		$value = null;
 
 		if ( array_key_exists( $prop, $this->data ) ) {

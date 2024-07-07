@@ -56,7 +56,7 @@
 						view    = this;
 
 					this.$el.empty();
-					this.unblock();
+					tjhis.unblock();
 
 					if ( _.size( classes ) ) {
 						// Sort classes
